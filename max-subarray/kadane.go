@@ -5,6 +5,7 @@ import (
 	"log"
 )
 
+// kadane algorithm
 func maxSubarray(arr []int) int {
 	maxEndingHere, maxSoFar := arr[0], arr[0]
 
