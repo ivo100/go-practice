@@ -2,6 +2,8 @@ package main
 
 import "log"
 
+// this is max subarray problem - see kadane algorithm
+
 // https://practice.geeksforgeeks.org/problems/stock-buy-and-sell/0
 /*
 The cost of stock on each day is given in an array A[] of size N. Find all the days on which you buy and sell the stock so that in between those days your profit is maximum.
