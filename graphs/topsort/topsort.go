@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package main
 
 import (
@@ -129,4 +130,56 @@ func main() {
 	// Node ID: 1, Label: A, Name: Node A
 	// Node ID: 2, Label: B, Name: Node B
 	// Node ID: 3, Label:
+=======
+package topsort
+
+// ChatGPT version - seems the best
+
+type Graph struct {
+	V   int
+	Adj map[int][]int
+}
+
+func (g *Graph) AddEdge(u, v int) {
+	g.Adj[u] = append(g.Adj[u], v)
+}
+
+// TopologicalSort sorts given DAG so no vertex appears before any of its descendants
+// if there are cycles (input is not a DAG) - returns nil slice
+func TopologicalSort(dag *Graph) []int {
+	//compute the in-degree of each vertex in the graph, which is the number of
+	//incoming edges to the vertex.
+	inDegree := make(map[int]int)
+	for u := 0; u < dag.V; u++ {
+		inDegree[u] = 0
+	}
+	for u := 0; u < dag.V; u++ {
+		for _, v := range dag.Adj[u] {
+			inDegree[v]++
+		}
+	}
+	// initialize queue q with all vertices that have zero incoming.
+	// repeatedly remove vertex u from q, add it to the result in order,
+	// decrement  the in-degree of all its neighbors.
+	// If a neighbor v of u has zero in-degree, add it to the queue q.
+	var q []int
+	for u := 0; u < dag.V; u++ {
+		if inDegree[u] == 0 {
+			q = append(q, u)
+		}
+	}
+	var result []int
+	for len(q) > 0 {
+		u := q[0]
+		q = q[1:]
+		result = append(result, u)
+		for _, v := range dag.Adj[u] {
+			inDegree[v]--
+			if inDegree[v] == 0 {
+				q = append(q, v)
+			}
+		}
+	}
+	return result
+>>>>>>> 9d3a72b (BFS + topo)
 }
