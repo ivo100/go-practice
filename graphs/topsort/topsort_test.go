@@ -1,29 +1,11 @@
-package topsort
+package main
 
+/*
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
-
-func TestTopologicalSort(t *testing.T) {
-	g := Graph{
-		V:   6,
-		Adj: make(map[int][]int),
-	}
-	g.AddEdge(5, 2)
-	g.AddEdge(5, 0)
-	g.AddEdge(4, 0)
-	g.AddEdge(4, 1)
-	g.AddEdge(2, 3)
-	g.AddEdge(3, 1)
-	sorted := TopologicalSort(&g)
-	//assert.EqualValues(t, []int{4, 5, 2, 0, 3, 1}, sorted)
-	fmt.Println("Topologically sorted order:")
-	for _, v := range sorted {
-		fmt.Printf("%d ", v)
-	}
-}
 
 const (
 	Under  = 0
@@ -71,3 +53,4 @@ func TestNotDAG(t *testing.T) {
 	g.AddEdge(2, 0)
 	assert.Nil(t, TopologicalSort(&g))
 }
+*/

@@ -11,13 +11,12 @@ type ICache interface {
 }
 
 /*
-
+todo:
 type ICache[K comparable, V any] interface {
-	Get(key K) (value V, found bool)
 	Set(key K, value V, duration time.Duration)
-	Range(f func(key K, value V) bool)
+	Get(key K) (value V, found bool)
 	Delete(key K)
 	Close()
+	Range(visitor func(key K, value V) bool)
 }
-
 */

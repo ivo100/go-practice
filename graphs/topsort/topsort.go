@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package main
 
 import (
@@ -130,7 +129,9 @@ func main() {
 	// Node ID: 1, Label: A, Name: Node A
 	// Node ID: 2, Label: B, Name: Node B
 	// Node ID: 3, Label:
-=======
+}
+
+/***
 package topsort
 
 // ChatGPT version - seems the best
@@ -181,5 +182,5 @@ func TopologicalSort(dag *Graph) []int {
 		}
 	}
 	return result
->>>>>>> 9d3a72b (BFS + topo)
 }
+***/
