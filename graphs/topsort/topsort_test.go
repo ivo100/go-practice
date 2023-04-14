@@ -1,6 +1,8 @@
 package main
 
 /*
+ */
+
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
@@ -53,4 +55,3 @@ func TestNotDAG(t *testing.T) {
 	g.AddEdge(2, 0)
 	assert.Nil(t, TopologicalSort(&g))
 }
-*/
