@@ -1,0 +1,121 @@
+If you want to use a contract-first approach to generate Swagger documentation, you can follow these steps:
+
+Create a Swagger specification file in YAML or JSON format. This file should describe your API's endpoints, parameters, responses, and other details.
+Here's an example of a Swagger specification file for a simple user service:
+
+swagger: "2.0"
+info:
+  title: "User Service API"
+  version: "1.0.0"
+paths:
+  /users:
+    get:
+      tags:
+        - users
+      summary: "Get a list of users"
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+    post:
+      tags:
+        - users
+      summary: "Add a new user"
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: "user"
+          in: "body"
+          description: "The user to add"
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        201:
+          description: "Successful response"
+  /users/{id}:
+    get:
+      tags:
+        - users
+      summary: "Get a user by ID"
+      produces:
+        - application/json
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the user to get"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Successful response"
+          schema:
+            $ref: "#/definitions/User"
+        404:
+          description: "User not found"
+definitions:
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "The user's ID"
+      first_name:
+        type: "string"
+        description: "The user's first name"
+      last_name:
+        type: "string"
+        description: "The user's last name"
+
+
+Here's an example of how you can use swagger-codegen to generate Go code from the Swagger specification file above:
+
+swagger-codegen generate -i swagger.yaml -l go -o generated-code
+
+Use the generated Go code to implement your API's endpoints and business logic. You can modify the generated code to add additional functionality or to integrate with your data store, authentication system, etc.
+Here's an example of how you can modify the generated code to implement a simple user service:
+
+
+package main
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+type User struct {
+	ID        string `json:"id"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+}
+
+type UserRepository interface {
+	GetUserByID(id string) (User, error)
+	GetAllUsers() ([]User, error)
+	AddUser(user User) error
+}
+
+type UserService struct {
+	repo UserRepository
+}
+
+func NewUserService(repo UserRepository) *UserService {
+	return &UserService{repo}
+}
+
+func (s *UserService) GetAllUsers(c *gin.Context) {
+	users, err := s.repo.GetAllUsers()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, users)
+
