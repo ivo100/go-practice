@@ -1,0 +1,31 @@
+
+https://github.com/nhatthm/grpcmock
+
+gRPC Test Utilities for Golang
+Test gRPC service and client like a pro.
+
+https://github.com/nhatthm/grpcmock/blob/master/resources/docs/SERVER.md#create-a-new-grpc-server
+
+====
+
+
+Yes, there are several tools available that make creating mocked clients of GRPC services easier. Here are a few examples:
+
+mockgen - This is a tool that generates Go interfaces and mocks based on the specified source code. It can be used to generate a mock implementation of a GRPC client interface for testing purposes. Here's an example:
+
+mockgen github.com/your-org/your-service YourGRPCClientInterface > mock_client.go
+
+
+This will generate a mock implementation of YourGRPCClientInterface and write it to a file named mock_client.go.
+
+gomock - This is a Go testing library that provides a way to create mock objects for testing purposes. It can be used to create a mock implementation of a GRPC client interface. Here's an example:
+
+mockCtrl := gomock.NewController(t)
+defer mockCtrl.Finish()
+
+mockClient := pb.NewMockYourGRPCClient(mockCtrl)
+
+grpcmock - This is a lightweight tool that provides a way to generate mock implementations of GRPC services for testing purposes. Here's an example:
+
+mockService := grpcmock.NewMockService()
+

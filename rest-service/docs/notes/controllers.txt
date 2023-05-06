@@ -1,0 +1,191 @@
+
+In RESTful architecture, the most commonly used terminology for the components that handle HTTP requests and responses are:
+
+Handler: A handler is a function or method that handles a specific HTTP request. A handler is responsible for extracting data from the request, performing any necessary business logic, and returning an HTTP response.
+
+Controller: A controller is a type of handler that is responsible for managing a set of related HTTP requests. A controller typically contains multiple methods, each of which corresponds to a different HTTP request.
+
+Service: A service is a layer that contains the business logic of an application. Services are typically used by controllers to perform complex operations, such as interacting with a database or third-party API.
+
+
+
+
+package main
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
+	"github.com/swaggo/swag/example/basic/api"
+	_ "github.com/swaggo/swag/example/basic/docs"
+)
+
+// User represents a user in the system.
+type User struct {
+	ID       string `json:"id"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+}
+
+// UserService provides an interface for managing users.
+type UserService interface {
+	GetUser(id string) (*User, error)
+	CreateUser(user *User) (*User, error)
+}
+
+// UserRepository provides an interface for persisting users.
+type UserRepository interface {
+	SaveUser(user *User) (*User, error)
+	GetUser(id string) (*User, error)
+}
+
+// UserRepositoryImpl provides a concrete implementation of UserRepository.
+type UserRepositoryImpl struct {
+	users map[string]*User
+}
+
+func (repo *UserRepositoryImpl) SaveUser(user *User) (*User, error) {
+	repo.users[user.ID] = user
+	return user, nil
+}
+
+func (repo *UserRepositoryImpl) GetUser(id string) (*User, error) {
+	if user, ok := repo.users[id]; ok {
+		return user, nil
+	}
+	return nil, nil
+}
+
+// UserServiceImpl provides a concrete implementation of UserService.
+type UserServiceImpl struct {
+	userRepo UserRepository
+}
+
+func (svc *UserServiceImpl) GetUser(id string) (*User, error) {
+	return svc.userRepo.GetUser(id)
+}
+
+func (svc *UserServiceImpl) CreateUser(user *User) (*User, error) {
+	user.ID = "1"
+	return svc.userRepo.SaveUser(user)
+}
+
+// UserController handles requests for user resources.
+type UserController struct {
+	userService UserService
+}
+
+func (ctrl *UserController) GetUser(c *gin.Context) {
+	id := c.Param("id")
+	user, err := ctrl.userService.GetUser(id)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	if user == nil {
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+	c.JSON(http.StatusOK, user)
+}
+
+func (ctrl *UserController) CreateUser(c *gin.Context) {
+	var user User
+	if err := c.ShouldBindJSON(&user); err != nil {
+		c.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+	createdUser, err := ctrl.userService.CreateUser(&user)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	c.JSON(http.StatusOK, createdUser)
+}
+
+// InitRoutes initializes the Gin router with the API routes.
+func InitRoutes(userCtrl *UserController) *gin.Engine {
+	r := gin.Default()
+
+	// Serve Swagger UI
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	userGroup := r.Group("/users")
+	{
+		userGroup.GET("/:id", userCtrl.GetUser)
+		userGroup.POST("/", userCtrl.CreateUser)
+	}
+
+	return r
+}
+
+// Run starts the Gin router and serves the API.
+func Run() {
+	userRepo := &UserRepositoryImpl{
+		users: make(map[string]*User),
+	}
+	userService := &UserServiceImpl{
+		userRepo: userRepo,
+	}
+	userController := &UserController{
+		userService: userService,
+	}
+	r := InitRoutes(userController)
+	_ = r.Run(":8080")
+}
+
+// swagger:route GET /users/{id} user getUserRequest
+// ---
+// summary: Get a user
+// description: Returns a user by ID.
+// parameters:
+// - name: id
+//   in: path
+//   description: ID of the user to get
+//   required: true
+//   schema:
+//     type: string
+// responses:
+//   '200':
+//     description: OK
+//     schema:
+//       $ref: '#/definitions/User'
+//   '404':
+//     description: User not found
+
+// swagger:route POST /users user createUserRequest
+// ---
+// summary: Create a user
+// description: Creates a new user.
+// parameters:
+// - name: user
+//   in: body
+//   description: User to create
+//   required: true
+//   schema:
+//     $ref: '#/definitions/User'
+// responses:
+//   '200':
+//     description: OK
+//     schema:
+//       $ref: '#/definitions/User'
+
+// User represents a user in the system.
+type User struct {
+	ID       string `json:"id"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+}
+
+===
+
+
+	// Initialize repository
+	userRepo := NewInMemoryUserRepository()
+
+	// Initialize service and inject the repository
+	userService := NewUserService(userRepo)
+
+

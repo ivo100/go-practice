@@ -1,9 +1,19 @@
 
 /*
 
+https://github.com/swaggo/gin-swagger
+
 Sure, you can generate Swagger documentation for your Gin REST API using the swaggo/gin-swagger package. Here's an example of how you can modify the code to include Swagger documentation:
 
 First, you need to add Swagger annotations to your UserService struct and its methods. Here's an example:
+
+
+In RESTful architecture, the most commonly used terminology for the components that handle HTTP requests and responses are:
+
+Handler: A handler is a function or method that handles a specific HTTP request. A handler is responsible for extracting data from the request, performing any necessary business logic, and returning an HTTP response.
+Controller: A controller is a type of handler that is responsible for managing a set of related HTTP requests. A controller typically contains multiple methods, each of which corresponds to a different HTTP request.
+Service: A service is a layer that contains the business logic of an application. Services are typically used by controllers to perform complex operations, such as interacting with a database or third-party API.
+
 
 */
 

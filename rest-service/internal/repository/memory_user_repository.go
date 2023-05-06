@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"myservice/internal/core"
 	"sync"
+	"userservice/internal/core"
 )
 
 // MemoryUserRepository is an in-memory implementation of UserRepository.
@@ -31,7 +31,7 @@ func (r *MemoryUserRepository) GetUser(id string) (*core.UserDto, error) {
 }
 
 // SaveUser creates new user or updates existing user
-func (r *MemoryUserRepository) SaveUser(user core.UserDto) error {
+func (r *MemoryUserRepository) SaveUser(user core.UserDto) (*core.UserDto, error) {
 	r.users.Store(user.ID, user)
-	return nil
+	return r.GetUser(user.ID)
 }

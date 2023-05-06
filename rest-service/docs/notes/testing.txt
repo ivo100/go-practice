@@ -1,0 +1,40 @@
+
+https://github.com/nhatthm/httpmock
+
+In a nutshell, the httpmock.Server is wrapper around httptest.Server. It provides extremely powerful methods to write complex expectations and test scenarios.
+
+For creating a basic server, you can use httpmock.NewServer(). It starts a new HTTP server, and you can write your expectations right away.
+
+However, if you use it in a test (with a t *testing.T), and wan
+
+
+/*
+Next, you need to add Swagger documentation to your main function using the swag.Init function and the gin-swagger middleware. Here's an example:
+*/
+
+// @title User API
+// @description This is a sample API for working with users.
+// @version 1
+// @host localhost:8080
+
+// @BasePath /api/v1
+
+// PingExample godoc
+// @Summary ping example
+// @Schemes
+// @Description do ping
+// @Tags example
+// @Accept json
+// @Produce json
+// @Success 200 {string} Helloworld
+// @Router /users/:id [get]
+
+
+// Run starts the Gin router and serves the API.
+func Run() {
+	//userRepo := repository.NewMemoryUserRepository()
+	//userService := service.NewUserService()
+	userController := NewUserController()
+	r := InitRoutes(userController)
+	_ = r.Run(":8080")
+}
