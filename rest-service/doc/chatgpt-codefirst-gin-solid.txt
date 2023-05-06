@@ -7,9 +7,6 @@ First, you need to add Swagger annotations to your UserService struct and its me
 
 */
 
-
-
-
 // User represents a user in the system.
 type User struct {
 	ID        string `json:"id"`
