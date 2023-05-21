@@ -7,7 +7,7 @@ type User struct {
 	LastName  string `json:"last_name" binding:"required,min=2"`
 }
 
-// UserService is the public interface of our service exposed via REST
+// UserService is the public interface of our service
 type UserService interface {
 	GetUser(id string) (*User, error)
 	AddUser(user User) (*User, error)
