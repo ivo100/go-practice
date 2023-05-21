@@ -8,6 +8,7 @@ import (
 // UserDto is user data transfer object - it is used to communicate between service and repository layers
 type UserDto struct {
 	ID        string `mapstructure:"id"`
+	UserName  string `mapstructure:"user_name"`
 	FirstName string `mapstructure:"first_name"`
 	LastName  string `mapstructure:"last_name"`
 }

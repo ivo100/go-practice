@@ -6,6 +6,8 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/swag/example/basic/docs"
 	"net/http"
+	"userservice/internal/controller"
+	"userservice/internal/routes"
 )
 
 // @BasePath /api/v1
@@ -23,7 +25,7 @@ func Helloworld(g *gin.Context) {
 	g.JSON(http.StatusOK, "helloworld")
 }
 
-func main() {
+func mainToTestSwago() {
 	r := gin.Default()
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	v1 := r.Group("/api/v1")
@@ -38,8 +40,8 @@ func main() {
 
 }
 
-//func main1() {
-//	userController := controller.NewUserController()
-//	router := routes.InitializeRoutes(userController)
-//	router.Run(":8080")
-//}
+func main() {
+	userController := controller.NewUserController()
+	router := routes.InitializeRoutes(userController)
+	router.Run(":8000")
+}

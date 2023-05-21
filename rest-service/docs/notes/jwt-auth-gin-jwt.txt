@@ -1,5 +1,19 @@
 
 https://github.com/appleboy/gin-jwt
+===
+IMPORTANT
+instead of json use gjson and jj
+https://github.com/tidwall/gjson
+
+instead of viper use koanf
+https://github.com/knadh/koanf
+===
+
+https://techdocs.akamai.com/iot-token-access-control/docs/generate-ecdsa-keys
+
+openssl ecparam -name secp256k1 -genkey -noout -out ec-secp256k1-priv-key.pem
+
+openssl ec -in ec-secp256k1-priv-key.pem -pubout > ec-secp256k1-pub-key.pem
 
 go run _example/basic/server.go
 
