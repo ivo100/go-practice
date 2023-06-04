@@ -2,12 +2,12 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/ivo100/go-practice/userservice/internal/controller"
+	"github.com/ivo100/go-practice/userservice/internal/routes"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/swag/example/basic/docs"
 	"net/http"
-	"userservice/internal/controller"
-	"userservice/internal/routes"
 )
 
 // @BasePath /api/v1

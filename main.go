@@ -2,7 +2,8 @@ package main
 
 import (
 	"github.com/ivo100/go-practice/cache"
-	"github.com/ivo100/go-practice/userservice/userservice"
+	userservice "github.com/ivo100/go-practice/userservice/pkg"
+	"log"
 	"time"
 )
 
@@ -18,7 +19,7 @@ func main() {
 	c.Set("sticky", "forever", 0)
 	c.Set("hello", "Hello", cycle/2)
 	hello, found := c.Get("hello")
-
+	log.Printf("found %v, hello %v", found, hello)
 	var svc Svc
 	_ = svc
 

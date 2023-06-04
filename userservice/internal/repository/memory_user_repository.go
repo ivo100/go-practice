@@ -1,8 +1,8 @@
 package repository
 
 import (
+	"github.com/ivo100/go-practice/userservice/internal/core"
 	"sync"
-	"userservice/internal/core"
 )
 
 // MemoryUserRepository is an in-memory implementation of UserRepository.

@@ -2,11 +2,11 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/ivo100/go-practice/userservice/internal/core"
+	"github.com/ivo100/go-practice/userservice/internal/service"
+	svc "github.com/ivo100/go-practice/userservice/pkg"
 	"log"
 	"net/http"
-	"userservice/internal/core"
-	"userservice/internal/service"
-	svc "userservice/pkg"
 )
 
 // UserController handles requests for user resources.

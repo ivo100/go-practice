@@ -3,9 +3,9 @@ package routes
 import (
 	"github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
+	"github.com/ivo100/go-practice/userservice/internal/controller"
 	"log"
 	"time"
-	"userservice/internal/controller"
 )
 
 // User demo

@@ -1,9 +1,9 @@
 package service
 
 import (
-	"userservice/internal/core"
-	"userservice/internal/repository"
-	svc "userservice/pkg"
+	"github.com/ivo100/go-practice/userservice/internal/core"
+	"github.com/ivo100/go-practice/userservice/internal/repository"
+	svc "github.com/ivo100/go-practice/userservice/pkg"
 )
 
 // UserServiceImpl provides a REST API UserService implementation for working with users.

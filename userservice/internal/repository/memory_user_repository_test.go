@@ -1,9 +1,9 @@
 package repository
 
 import (
+	"github.com/ivo100/go-practice/userservice/internal/core"
 	"reflect"
 	"testing"
-	"userservice/internal/core"
 )
 
 func TestMemoryUserRepository_SaveAndGetUser(t *testing.T) {

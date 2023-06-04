@@ -4,13 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"github.com/ivo100/go-practice/userservice/internal/controller"
+	"github.com/ivo100/go-practice/userservice/internal/routes"
+	svc "github.com/ivo100/go-practice/userservice/pkg"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"userservice/internal/controller"
-	"userservice/internal/routes"
-	svc "userservice/pkg"
 )
 
 func setup() *gin.Engine {

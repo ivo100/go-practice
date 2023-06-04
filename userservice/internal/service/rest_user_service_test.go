@@ -1,9 +1,9 @@
 package service
 
 import (
+	svc "github.com/ivo100/go-practice/userservice/pkg"
 	"reflect"
 	"testing"
-	svc "userservice/pkg"
 )
 
 func TestUserServiceImpl_AddGetUser(t *testing.T) {
