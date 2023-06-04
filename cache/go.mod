@@ -1,3 +1,3 @@
-module cache
+module github.com/ivo100/go-practice/cache
 
-go 1.20
+go 1.19

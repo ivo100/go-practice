@@ -1,4 +1,4 @@
-module userservice
+module github.com/ivo100/go-practice/userservice
 
 go 1.19
 
