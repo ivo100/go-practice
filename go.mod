@@ -1,3 +1,4 @@
 module github.com/ivo100/go-practice
 
-go 1.20
+go 1.19
+
