@@ -14,6 +14,8 @@ type Svc struct {
 	userservice.UserService
 }
 
+//----------------------------------------------------------------------------
+
 type TimeZone int
 
 const (
@@ -35,13 +37,15 @@ func main() {
 	log.Printf("EST %v, PST %v", EST, PST)
 
 	c.Set("sticky", "forever", 0)
-	c.Set("hello", "Hello", duration/2)
-	hello, found := c.Get("hello")
+	c.Set("val", "Hello", duration/2)
+	val, found := c.Get("val")
 	log.Printf("cache TTL %v", duration)
-	log.Printf("found %v, value %v", found, hello)
+	log.Printf("found %v, value %v", found, val)
 	time.Sleep(duration)
-	hello, found = c.Get("hello")
-	log.Printf("must expire - found %v, value %v", found, hello)
+	val, found = c.Get("val")
+	log.Printf("must expire - found %v, value %v", found, val)
+	val, found = c.Get("sticky")
+	log.Printf("sticky - found %v, value %v", found, val)
 
 	var svc Svc
 	_ = svc

@@ -9,7 +9,7 @@ import (
 /*
 https://practice.geeksforgeeks.org/problems/deletion-and-reverse-in-linked-list/1
 
-Given a Circular Linked List of size N.
+Given a Circular Linked Ring of size N.
 The task is to delete the given node (excluding the first and last node)
 in circular linked list and then print the reverse of the circular linked list.
 
@@ -26,7 +26,7 @@ Output:
 func main() {
 	a := []int{1, 7, 8, 10}
 	//a := []int{1, 2, 3}
-	c := NewList(a)
+	c := NewRing(a)
 	log.Printf("list %v", c)
 	c.Reverse()
 	log.Printf(" rev %v", c)
@@ -36,26 +36,26 @@ func main() {
 	log.Printf(" rev %v", c)
 }
 
-type Node struct {
+type IntNode struct {
 	V    int
-	Next *Node
+	Next *IntNode
 }
 
-type List struct {
-	head *Node
+type Ring struct {
+	head *IntNode
 	len  int
 }
 
-func NewList(a []int) *List {
-	lst := &List{}
+func NewRing(a []int) *Ring {
+	lst := &Ring{}
 	if len(a) == 0 {
 		return lst
 	}
 	lst.len = len(a)
-	lst.head = &Node{V: a[0]}
+	lst.head = &IntNode{V: a[0]}
 	prev := lst.head
 	for i := 1; i < len(a); i++ {
-		x := &Node{V: a[i]}
+		x := &IntNode{V: a[i]}
 		prev.Next = x
 		prev = x
 	}
@@ -63,7 +63,7 @@ func NewList(a []int) *List {
 	return lst
 }
 
-func (l *List) Delete(x int) bool {
+func (l *Ring) Delete(x int) bool {
 	if l.head == nil {
 		return false
 	}
@@ -86,7 +86,7 @@ func (l *List) Delete(x int) bool {
 	return false
 }
 
-func (l *List) Reverse() {
+func (l *Ring) Reverse() {
 	if l.head == nil {
 		return
 	}
@@ -106,7 +106,7 @@ func (l *List) Reverse() {
 	//prev = curr
 	//curr = next
 
-	var first, prev, curr, next *Node
+	var first, prev, curr, next *IntNode
 	first = l.head
 	prev = first
 	curr = first.Next
@@ -123,7 +123,7 @@ func (l *List) Reverse() {
 	}
 }
 
-func (l *List) String() string {
+func (l *Ring) String() string {
 	if l.head == nil {
 		return "<empty>"
 	}
