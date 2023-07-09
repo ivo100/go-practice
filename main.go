@@ -6,6 +6,7 @@ import (
 	"log"
 	"time"
 )
+
 //
 
 type Svc struct {
@@ -23,5 +24,4 @@ func main() {
 	log.Printf("found %v, hello %v", found, hello)
 	var svc Svc
 	_ = svc
-
 }

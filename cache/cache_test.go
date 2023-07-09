@@ -1,14 +1,13 @@
-package cache_test
+package cache
 
 import (
-	"practice/cache"
 	"testing"
 	"time"
 )
 
 func TestGetSet(t *testing.T) {
 	cycle := 100 * time.Millisecond
-	c := cache.New(cycle)
+	c := New(cycle)
 	defer c.Close()
 
 	c.Set("sticky", "forever", 0)
@@ -47,7 +46,7 @@ func TestGetSet(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
-	c := cache.New(time.Minute)
+	c := New(time.Minute)
 	c.Set("hello", "Hello", time.Hour)
 	_, found := c.Get("hello")
 
@@ -65,7 +64,7 @@ func TestDelete(t *testing.T) {
 }
 
 func TestRange(t *testing.T) {
-	c := cache.New(time.Minute)
+	c := New(time.Minute)
 	c.Set("hello", "Hello", time.Hour)
 	c.Set("world", "World", time.Hour)
 	count := 0
@@ -81,7 +80,7 @@ func TestRange(t *testing.T) {
 }
 
 func TestRangeTimer(t *testing.T) {
-	c := cache.New(time.Minute)
+	c := New(time.Minute)
 	c.Set("message", "Hello", time.Nanosecond)
 	c.Set("world", "World", time.Nanosecond)
 	time.Sleep(time.Microsecond)
@@ -97,13 +96,13 @@ func BenchmarkNew(b *testing.B) {
 
 	b.RunParallel(func(pb *testing.PB) {
 		for pb.Next() {
-			cache.New(5 * time.Second).Close()
+			New(5 * time.Second).Close()
 		}
 	})
 }
 
 func BenchmarkGet(b *testing.B) {
-	c := cache.New(5 * time.Second)
+	c := New(5 * time.Second)
 	defer c.Close()
 	c.Set("Hello", "World", 0)
 
@@ -118,7 +117,7 @@ func BenchmarkGet(b *testing.B) {
 }
 
 func BenchmarkSet(b *testing.B) {
-	c := cache.New(5 * time.Second)
+	c := New(5 * time.Second)
 	defer c.Close()
 
 	b.ResetTimer()
@@ -132,7 +131,7 @@ func BenchmarkSet(b *testing.B) {
 }
 
 func BenchmarkDelete(b *testing.B) {
-	c := cache.New(5 * time.Second)
+	c := New(5 * time.Second)
 	defer c.Close()
 
 	b.ResetTimer()
