@@ -1,4 +1,4 @@
-module hello
+module hello-mongo
 
 go 1.20
 
