@@ -83,7 +83,7 @@ func (l *List[T]) Remove() *T {
 	}
 	res := l.current.value
 	//      V
-	// C -> D -> E
+	// C -> D -> E ...
 	// C -> E  ...
 	// replace current node with next node
 	// delete next node
