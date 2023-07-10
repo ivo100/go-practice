@@ -4,4 +4,5 @@ use (
 	mongo/hello-mongo
 	.
 	userservice
+	books
 )
