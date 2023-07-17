@@ -34,17 +34,25 @@ Output:
 Explanation:
 Testcase 1: We can buy stock on day 0, and sell it on 3rd day, which will give us maximum profit.
 
+7, 1, 5, 3, 6, 4
+
+buy day 1 at 1
+sell day 4 at 6
+profit 6-1 = 5
+
 Note: Output format is as follows - (buy_day sell_day) (buy_day sell_day)
 For each input, output should be in a single line.
 */
-func main() {
+func main1() {
 	var prof int
-	p := []int{100, 180, 260, 310, 40, 535, 695}
+	p := []int{7, 1, 5, 3, 6, 4}
 	prof = stocks(p)
-	log.Print("-----")
-	p = []int{23, 13, 25, 29, 33, 19, 34, 45, 65, 67}
-	prof = stocks(p)
-	log.Print("-----")
+	//p := []int{100, 180, 260, 310, 40, 535, 695}
+	//prof = stocks(p)
+	//log.Print("-----")
+	//p = []int{23, 13, 25, 29, 33, 19, 34, 45, 65, 67}
+	//prof = stocks(p)
+	//log.Print("-----")
 	_ = prof
 }
 
@@ -55,16 +63,17 @@ func stocks(p []int) int {
 	j := 1
 	profit := 0
 	bought := 0
+	log.Printf("stock prices %v", p)
 	for j < l && i < j {
 		d := p[j] - p[j-1]
-		//log.Printf("i %v, j %v, d %v", i, j, d)
+		log.Printf("i %v, j %v, l %v, d %v", i, j, l, d)
 		// up?
 		if d > 0 {
 			if bal == 0 {
 				// buy p[i]
 				bal = p[i]
 				bought = i
-				log.Printf("day %v BUY at %v, tot.profit %v", bought, bal, profit)
+				log.Printf(">>> day %v BUY at %v", bought, bal)
 			}
 			// next day
 			j++
@@ -86,7 +95,7 @@ func stocks(p []int) int {
 				if pr > 0 {
 					// time to sell
 					profit += pr
-					log.Printf("day %v SELL at %v, profit %v, tot.prof %v", j-1, p[j-1], pr, profit)
+					log.Printf(">>> day %v SELL at %v, profit %v, tot.prof %v", j-1, p[j-1], pr, profit)
 					bal = 0
 				}
 				i = j
@@ -98,5 +107,6 @@ func stocks(p []int) int {
 			j++
 		}
 	}
-	return profit
+	log.Printf("no solution?")
+	return 0
 }
