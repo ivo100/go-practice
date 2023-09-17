@@ -22,6 +22,7 @@ func main() {
 		fmt.Printf("Failed to create consumer: %s", err)
 		os.Exit(1)
 	}
+	defer consumer.Close()
 
 	topic := common.Topic
 	err = consumer.SubscribeTopics([]string{topic}, nil)
@@ -52,6 +53,5 @@ func main() {
 
 		}
 	}
-	fmt.Println("Closing transactional consumer")
-	consumer.Close()
+	//fmt.Println("Closing transactional consumer")
 }

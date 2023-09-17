@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	common.Version() //
+	common.Version() // 2.2.0
 	conf := common.ReadConfig(common.ConfigFile)
 	p, err := kafka.NewProducer(&conf)
 	if err != nil {
@@ -45,3 +45,28 @@ func main() {
 	p.Flush(3 * 1000)
 	p.Close()
 }
+
+/*
+
+if you want sync send
+
+delivery_chan := make(chan kafka.Event, 10000)
+err = p.Produce(&kafka.Message{
+    TopicPartition: kafka.TopicPartition{Topic: topic, Partition: kafka.PartitionAny},
+    Value: []byte(value)},
+    delivery_chan
+)
+
+ e := <-delivery_chan
+ m := e.(*kafka.Message)
+
+ if m.TopicPartition.Error != nil {
+     fmt.Printf("Delivery failed: %v\n", m.TopicPartition.Error)
+ } else {
+     fmt.Printf("Delivered message to topic %s [%d] at offset %v\n",
+             *m.TopicPartition.Topic, m.TopicPartition.Partition, m.TopicPartition.Offset)
+ }
+ close(delivery_chan)
+
+
+*/
