@@ -11,7 +11,6 @@ import (
 func main() {
 
 	conf := common.ReadConfig(common.ConfigFile)
-	//conf["acks"] = "all"
 	conf["transactional.id"] = "my-transactional-id"
 
 	// Create a Kafka producer instance
@@ -25,21 +24,9 @@ func main() {
 
 	topic := common.Topic
 
-	// Go-routine to handle message delivery reports and
+	// log message delivery reports and
 	// possibly other event types (errors, stats, etc)
-	go func() {
-		for e := range producer.Events() {
-			switch ev := e.(type) {
-			case *kafka.Message:
-				if ev.TopicPartition.Error != nil {
-					fmt.Printf("Failed to deliver message: %v\n", ev.TopicPartition)
-				} else {
-					fmt.Printf("Produced event to topic %s: key = %-10s value = %s\n",
-						*ev.TopicPartition.Topic, string(ev.Key), string(ev.Value))
-				}
-			}
-		}
-	}()
+	go common.LogDelivery(producer)
 
 	users := []string{"aaaa", "bbbb", "cccc"}
 	items := []string{"alpha", "beta", "gamma"}
@@ -50,9 +37,9 @@ func main() {
 		return
 	}
 
+	//deliveryChan := make(chan kafka.Event, 10000)
+
 	for n := 0; n < 3; n++ {
-		//key := users[rand.Intn(len(users))]
-		//data := items[rand.Intn(len(items))]
 		key := users[n]
 		data := items[n]
 
@@ -82,10 +69,8 @@ func main() {
 		}
 
 	}
-
 	// Wait for all messages to be delivered
-	producer.Flush(5 * 1000)
-	producer.Close()
+	producer.Flush(2 * 1000)
 	fmt.Println("Closing transactional producer")
-
+	producer.Close()
 }

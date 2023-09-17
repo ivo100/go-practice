@@ -1,0 +1,7 @@
+# Required connection configs for Kafka producer, consumer, and admin
+bootstrap.servers=pkc-lzvrd.us-west4.gcp.confluent.cloud:9092
+security.protocol=SASL_SSL
+sasl.mechanisms=PLAIN
+sasl.username=EOQREUDE63U6Y226
+sasl.password=...
+

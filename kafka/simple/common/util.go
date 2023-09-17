@@ -23,9 +23,7 @@ func Version() {
 }
 
 func ReadConfig(configFile string) kafka.ConfigMap {
-
 	m := make(map[string]kafka.ConfigValue)
-
 	file, err := os.Open(configFile)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to open file: %s", err)
@@ -52,5 +50,20 @@ func ReadConfig(configFile string) kafka.ConfigMap {
 	}
 
 	return m
+}
 
+func LogDelivery(p *kafka.Producer) {
+	for e := range p.Events() {
+		switch ev := e.(type) {
+		case *kafka.Message:
+			tp := ev.TopicPartition
+			if tp.Error != nil {
+				fmt.Printf("*** Error: %v\n", tp.Error.Error())
+				fmt.Printf("Delivery failed topic: %v, part: %v, key: %s\n", *tp.Topic, tp.Partition, string(ev.Key))
+			} else {
+				fmt.Printf("Message sent to topic: %v, part: %v, key: %s, value: %s\n", *tp.Topic, tp.Partition, string(ev.Key), string(ev.Value))
+			}
+		}
+	}
+	fmt.Printf("exit LogDelivery\n")
 }
