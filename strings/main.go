@@ -65,7 +65,7 @@ func alternate(s string) int {
 	}
 
 	var sb strings.Builder
-	for b, _ := range let {
+	for b := range let {
 		fmt.Printf("%s\n", string(b))
 		sb.WriteString(string(b))
 	}
@@ -73,7 +73,7 @@ func alternate(s string) int {
 	k := len(let)
 	fmt.Printf("let: %v\n", let)
 	a := make([]string, 0)
-	for b, _ := range let {
+	for b := range let {
 		a = append(a, string(b))
 	}
 	comb := combinations(k, k-2, a)
@@ -151,12 +151,48 @@ func alternating(s string) bool {
 	return true
 }
 
+func digits(s string) string {
+	r := []rune(s)
+	var res []rune
+	for _, c := range r {
+		if c >= '0' && c <= '9' {
+			res = append(res, c)
+		}
+	}
+	return (string)(res)
+}
+
+func isValidUSPhone(input string) bool {
+	const USPhoneSize = 10
+	number := digits(input)
+	l := len(number)
+	if l < USPhoneSize {
+		return false
+	}
+	switch l {
+	case USPhoneSize:
+		// not guaranteed to be valid - just syntax check
+		return true
+	case 1 + USPhoneSize:
+		return strings.HasPrefix(number, "1")
+	default:
+		// allow > 11 digits if ext present?
+		// who uses extensions anymore?
+		return strings.Contains(strings.ToLower(input), "ext")
+	}
+}
+
 func main() {
 	//s := "abaacdabd"
 	//s := "beabeefeab"
-	s := "asdcbsdcagfsdbgdfanfghbsfdab"
-	l := alternate(s)
-	fmt.Printf("len %d\n", l)
+	check := []string{"+1 (800) 123 4567", "6197575696", "619 757 5696", "619757569"}
+	for _, phone := range check {
+		fmt.Printf("digits(%q): %q, isValidUSPhone: %v\n",
+			phone, digits(phone), isValidUSPhone(phone))
+	}
+	//s := "asdcbsdcagfsdbgdfanfghbsfdab"
+	//l := alternate(s)
+	//fmt.Printf("len %d\n", l)
 }
 
 /*
