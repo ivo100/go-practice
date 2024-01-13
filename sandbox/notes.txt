@@ -1,0 +1,69 @@
+package main
+
+import (
+	"fmt"
+	"github.com/traefik/yaegi/interp"
+	"os"
+	//"os/exec"
+	"time"
+)
+
+/*
+https://github.com/traefik/yaegi
+*/
+const (
+	path = `foo/foo.go`
+	src  = `
+package foo
+import "fmt"
+func Bar(s string) string {
+	fmt.Printf("this program was created at %s\n")
+	return s + "-Foo"
+}
+`
+)
+
+func main() {
+	i := interp.New(interp.Options{})
+	start := time.Now()
+	//WriteFile(src, path, start, false)
+	// using Yaegi
+	_, err := i.Eval(src)
+	if err != nil {
+		panic(err)
+	}
+	// "evaluate inject" foo.Bar
+	v, err := i.Eval("foo.Bar")
+	if err != nil {
+		panic(err)
+	}
+	// refer to it
+	bar := v.Interface().(func(string) string)
+	// call it
+	r := bar("Kung")
+	println(r)
+
+	// using go foo
+	//cmd := exec.Command("go", "foo", path)
+	//cmd.Stdout = os.Stdout
+	//cmd.Run()
+
+	end := time.Now()
+
+	fmt.Printf("it took %s\n", end.Sub(start))
+}
+
+func WriteFile(src, path string, start time.Time, overwrite bool) {
+	if FileExists(path) && !overwrite {
+		return
+	}
+	src = fmt.Sprintf(src, start)
+	os.WriteFile(path, []byte(src), 0666)
+}
+
+func FileExists(path string) bool {
+	if _, err := os.Stat(path); err == nil {
+		return true
+	}
+	return false
+}
