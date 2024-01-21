@@ -29,7 +29,7 @@ func refresh() {
 	}
 }
 
-func main() {
+func main1() {
 	app2 = tview.NewApplication()
 	view2 = tview.NewBox().SetDrawFunc(drawTime)
 

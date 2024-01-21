@@ -29,7 +29,7 @@ func updateTime() {
 	}
 }
 
-func main() {
+func main2() {
 	app = tview.NewApplication()
 
 	view = tview.NewModal().
