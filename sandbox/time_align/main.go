@@ -27,7 +27,6 @@ func main() {
 				data <- fetch()
 			}
 		}
-
 	}()
 
 	go func() {
