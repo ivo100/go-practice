@@ -2,6 +2,31 @@ go get -u github.com/samber/do/v2
 
 https://pkg.go.dev/github.com/samber/do/v2
 
+https://github.com/samber/do/blob/v2.0.0-beta.7/examples/simple/example.go
+
+Service aliasing
+
+You have probably already heard the Go proverb "Accept interfaces, return structs". The basic idea is to let the consumer define the interfaces it uses while the producer returns concrete types.
+
+This library offers a great API for assembling a large number of modules with loose coupling and a nice separation of concern.
+
+Aliases must be Go interfaces. It can be declared explicitly on injection using do.As(), or invoked implicitly using do.InvokeAs().
+
+Implicit alias invocation:
+provide struct, invoke interface
+do.InvokeAs()
+Explicit alias injection:
+provide struct, bind interface, invoke interface
+do.As()
+Implicit invocation (preferred)
+
+2 methods are available for implicit invocation:
+
+do.InvokeAs
+do.MustInvokeAs
+
+
+
 // Injector is a DI container.
 type Injector interface {
 	// api
