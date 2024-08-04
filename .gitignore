@@ -14,4 +14,7 @@
 *.out
 
 vendor/
-myenv/
+myenv
+venv
+*.pyc
+__pycache__
