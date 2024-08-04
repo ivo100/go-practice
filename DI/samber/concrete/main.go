@@ -34,7 +34,6 @@ func main() {
 	fmt.Println("Start DI")
 
 	di := do.New()
-
 	// provide wheels
 	do.ProvideNamedValue(di, "wheel-1", &Wheel{})
 	do.ProvideNamedValue(di, "wheel-2", &Wheel{})

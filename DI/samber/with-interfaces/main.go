@@ -34,7 +34,6 @@ func mainI() {
 	// DI magic happens here
 	do.As[*car.CarImpl, car.Car](di)
 	do.As[*engine.EngImpl, engine.Engine](di)
-
 	fmt.Println("root scope -->", di.ID(), di.ListProvidedServices())
 
 	// start the car
