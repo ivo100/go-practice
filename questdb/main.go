@@ -43,11 +43,7 @@ acl.admin.password=my_very_secure_pwd
 
 -- select * from 'trades_go'
 --drop table 'trades_go'
-
-
 CREATE TABLE 'trades' (ts TIMESTAMP, date DATE, name STRING, value INT) timestamp (ts);
-
-
 */
 
 var conn *pgx.Conn
