@@ -44,6 +44,36 @@ acl.admin.password=my_very_secure_pwd
 -- select * from 'trades_go'
 --drop table 'trades_go'
 CREATE TABLE 'trades' (ts TIMESTAMP, date DATE, name STRING, value INT) timestamp (ts);
+
+
+CREATE TABLE 'timesale' (
+	ts   	TIMESTAMP,
+	sym  	SYMBOL,
+	session  SYMBOL,
+	interval SYMBOL,
+	type 	SYMBOL,
+	high 	DOUBLE,
+	low  	DOUBLE,
+	open 	DOUBLE,
+	close 	DOUBLE,
+	price 	DOUBLE,
+	volume	LONG
+) timestamp (ts) PARTITION BY DAY WAL;
+
+CREATE TABLE 'timesale' (
+  ts TIMESTAMP,
+  sym SYMBOL capacity 256 CACHE,
+  session SYMBOL capacity 256 CACHE,
+  interval SYMBOL capacity 256 CACHE,
+  type SYMBOL capacity 256 CACHE,
+  high DOUBLE,
+  low DOUBLE,
+  open DOUBLE,
+  close DOUBLE,
+  price DOUBLE,
+  volume LONG
+) timestamp (ts) PARTITION BY DAY WAL;
+
 */
 
 var conn *pgx.Conn
