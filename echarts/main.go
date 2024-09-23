@@ -1,6 +1,9 @@
 package main
 
 import (
+	"github.com/go-echarts/go-echarts/v2/components"
+	"github.com/montanaflynn/stats"
+	"io"
 	"math/rand"
 	"os"
 
@@ -8,16 +11,17 @@ import (
 	"github.com/go-echarts/go-echarts/v2/opts"
 )
 
-// generate random data for bar chart
-func generateBarItems() []opts.BarData {
-	items := make([]opts.BarData, 0)
-	for i := 0; i < 7; i++ {
-		items = append(items, opts.BarData{Value: rand.Intn(300)})
-	}
-	return items
-}
+var dir = "echarts/html/"
 
 func main() {
+	barExample()
+	boxplotExample()
+	candlestickExample()
+}
+
+/////
+
+func barExample() {
 	// create a new bar instance
 	bar := charts.NewBar()
 	// set some global options like Title/Legend/ToolTip or anything else
@@ -31,6 +35,340 @@ func main() {
 		AddSeries("Category A", generateBarItems()).
 		AddSeries("Category B", generateBarItems())
 	// Where the magic happens
-	f, _ := os.Create("bar.html")
+	f, _ := os.Create(dir + "bar.html")
 	bar.Render(f)
+
+}
+
+// generate random data for bar chart
+func generateBarItems() []opts.BarData {
+	items := make([]opts.BarData, 0)
+	for i := 0; i < 7; i++ {
+		items = append(items, opts.BarData{Value: rand.Intn(300)})
+	}
+	return items
+}
+
+// /////
+var (
+	bpX = [...]string{"expr1", "expr2", "expr3", "expr4", "expr5"}
+	bpY = [][]float64{
+		{850, 740, 900, 1070, 930, 850, 950, 980, 980, 880, 1000, 980, 930, 650, 760, 810, 1000, 1000, 960, 960},
+		{960, 940, 960, 940, 880, 800, 850, 880, 900, 840, 830, 790, 810, 880, 880, 830, 800, 790, 760, 800},
+		{880, 880, 880, 860, 720, 720, 620, 860, 970, 950, 880, 910, 850, 870, 840, 840, 850, 840, 840, 840},
+		{890, 810, 810, 820, 800, 770, 760, 740, 750, 760, 910, 920, 890, 860, 880, 720, 840, 850, 850, 780},
+		{890, 840, 780, 810, 760, 810, 790, 810, 820, 850, 870, 870, 810, 740, 810, 940, 950, 800, 810, 870},
+	}
+)
+
+func createBoxPlotData(data []float64) []float64 {
+	min, _ := stats.Min(data)
+	max, _ := stats.Max(data)
+	q, _ := stats.Quartile(data)
+
+	return []float64{
+		min,
+		q.Q1,
+		q.Q2,
+		q.Q3,
+		max,
+	}
+}
+
+func generateBoxPlotItems(boxPlotData [][]float64) []opts.BoxPlotData {
+	items := make([]opts.BoxPlotData, 0)
+	for i := 0; i < len(boxPlotData); i++ {
+		items = append(items, opts.BoxPlotData{Value: createBoxPlotData(boxPlotData[i])})
+	}
+	return items
+
+}
+
+func boxPlotBase() *charts.BoxPlot {
+	bp := charts.NewBoxPlot()
+	bp.SetGlobalOptions(
+		charts.WithTitleOpts(opts.Title{Title: "basic boxplot example"}),
+	)
+
+	bp.SetXAxis(bpX).AddSeries("boxplot", generateBoxPlotItems(bpY))
+	return bp
+}
+
+func boxPlotMulti() *charts.BoxPlot {
+	bp := charts.NewBoxPlot()
+	bp.SetGlobalOptions(
+		charts.WithTitleOpts(opts.Title{Title: "boxplot with multi-series"}),
+	)
+
+	bp.SetXAxis(bpX[:2]).
+		AddSeries("series1", generateBoxPlotItems(bpY[:2])).
+		AddSeries("series2", generateBoxPlotItems(bpY[2:]))
+	return bp
+}
+
+//type BoxplotExamples struct{}
+
+func boxplotExample() {
+	page := components.NewPage()
+	page.AddCharts(
+		boxPlotBase(),
+		boxPlotMulti(),
+	)
+	f, err := os.Create(dir + "boxplot.html")
+	if err != nil {
+		panic(err)
+	}
+	page.Render(io.MultiWriter(f))
+}
+
+/////////
+
+type klineData struct {
+	date string
+	data [4]float32
+}
+
+var kd = [...]klineData{
+	{date: "2018/1/24", data: [4]float32{2320.26, 2320.26, 2287.3, 2362.94}},
+	{date: "2018/1/25", data: [4]float32{2300, 2291.3, 2288.26, 2308.38}},
+	{date: "2018/1/28", data: [4]float32{2295.35, 2346.5, 2295.35, 2346.92}},
+	{date: "2018/1/29", data: [4]float32{2347.22, 2358.98, 2337.35, 2363.8}},
+	{date: "2018/1/30", data: [4]float32{2360.75, 2382.48, 2347.89, 2383.76}},
+	{date: "2018/1/31", data: [4]float32{2383.43, 2385.42, 2371.23, 2391.82}},
+	{date: "2018/2/1", data: [4]float32{2377.41, 2419.02, 2369.57, 2421.15}},
+	{date: "2018/2/4", data: [4]float32{2425.92, 2428.15, 2417.58, 2440.38}},
+	{date: "2018/2/5", data: [4]float32{2411, 2433.13, 2403.3, 2437.42}},
+	{date: "2018/2/6", data: [4]float32{2432.68, 2434.48, 2427.7, 2441.73}},
+	{date: "2018/2/7", data: [4]float32{2430.69, 2418.53, 2394.22, 2433.89}},
+	{date: "2018/2/8", data: [4]float32{2416.62, 2432.4, 2414.4, 2443.03}},
+	{date: "2018/2/18", data: [4]float32{2441.91, 2421.56, 2415.43, 2444.8}},
+	{date: "2018/2/19", data: [4]float32{2420.26, 2382.91, 2373.53, 2427.07}},
+	{date: "2018/2/20", data: [4]float32{2383.49, 2397.18, 2370.61, 2397.94}},
+	{date: "2018/2/21", data: [4]float32{2378.82, 2325.95, 2309.17, 2378.82}},
+	{date: "2018/2/22", data: [4]float32{2322.94, 2314.16, 2308.76, 2330.88}},
+	{date: "2018/2/25", data: [4]float32{2320.62, 2325.82, 2315.01, 2338.78}},
+	{date: "2018/2/26", data: [4]float32{2313.74, 2293.34, 2289.89, 2340.71}},
+	{date: "2018/2/27", data: [4]float32{2297.77, 2313.22, 2292.03, 2324.63}},
+	{date: "2018/2/28", data: [4]float32{2322.32, 2365.59, 2308.92, 2366.16}},
+	{date: "2018/3/1", data: [4]float32{2364.54, 2359.51, 2330.86, 2369.65}},
+	{date: "2018/3/4", data: [4]float32{2332.08, 2273.4, 2259.25, 2333.54}},
+	{date: "2018/3/5", data: [4]float32{2274.81, 2326.31, 2270.1, 2328.14}},
+	{date: "2018/3/6", data: [4]float32{2333.61, 2347.18, 2321.6, 2351.44}},
+	{date: "2018/3/7", data: [4]float32{2340.44, 2324.29, 2304.27, 2352.02}},
+	{date: "2018/3/8", data: [4]float32{2326.42, 2318.61, 2314.59, 2333.67}},
+	{date: "2018/3/11", data: [4]float32{2314.68, 2310.59, 2296.58, 2320.96}},
+	{date: "2018/3/12", data: [4]float32{2309.16, 2286.6, 2264.83, 2333.29}},
+	{date: "2018/3/13", data: [4]float32{2282.17, 2263.97, 2253.25, 2286.33}},
+	{date: "2018/3/14", data: [4]float32{2255.77, 2270.28, 2253.31, 2276.22}},
+	{date: "2018/3/15", data: [4]float32{2269.31, 2278.4, 2250, 2312.08}},
+	{date: "2018/3/18", data: [4]float32{2267.29, 2240.02, 2239.21, 2276.05}},
+	{date: "2018/3/19", data: [4]float32{2244.26, 2257.43, 2232.02, 2261.31}},
+}
+
+func klineBase() *charts.Kline {
+	kline := charts.NewKLine()
+
+	x := make([]string, 0)
+	y := make([]opts.KlineData, 0)
+	for i := 0; i < len(kd); i++ {
+		x = append(x, kd[i].date)
+		y = append(y, opts.KlineData{Value: kd[i].data})
+	}
+
+	kline.SetGlobalOptions(
+		charts.WithTitleOpts(opts.Title{
+			Title: "Kline-example",
+		}),
+		charts.WithXAxisOpts(opts.XAxis{
+			SplitNumber: 20,
+		}),
+		charts.WithYAxisOpts(opts.YAxis{
+			Scale: opts.Bool(true),
+		}),
+		charts.WithDataZoomOpts(opts.DataZoom{
+			Start:      50,
+			End:        100,
+			XAxisIndex: []int{0},
+		}),
+	)
+
+	kline.SetXAxis(x).AddSeries("kline", y)
+	return kline
+}
+
+func klineDataZoomInside() *charts.Kline {
+	kline := charts.NewKLine()
+
+	x := make([]string, 0)
+	y := make([]opts.KlineData, 0)
+	for i := 0; i < len(kd); i++ {
+		x = append(x, kd[i].date)
+		y = append(y, opts.KlineData{Value: kd[i].data})
+	}
+
+	kline.SetGlobalOptions(
+		charts.WithTitleOpts(opts.Title{
+			Title: "DataZoom(inside)",
+		}),
+		charts.WithXAxisOpts(opts.XAxis{
+			SplitNumber: 20,
+		}),
+		charts.WithYAxisOpts(opts.YAxis{
+			Scale: opts.Bool(true),
+		}),
+		charts.WithDataZoomOpts(opts.DataZoom{
+			Type:       "inside",
+			Start:      50,
+			End:        100,
+			XAxisIndex: []int{0},
+		}),
+	)
+
+	kline.SetXAxis(x).AddSeries("kline", y)
+	return kline
+}
+
+func klineDataZoomBoth() *charts.Kline {
+	kline := charts.NewKLine()
+
+	x := make([]string, 0)
+	y := make([]opts.KlineData, 0)
+	for i := 0; i < len(kd); i++ {
+		x = append(x, kd[i].date)
+		y = append(y, opts.KlineData{Value: kd[i].data})
+	}
+
+	kline.SetGlobalOptions(
+		charts.WithTitleOpts(opts.Title{
+			Title: "DataZoom(inside&slider)",
+		}),
+		charts.WithXAxisOpts(opts.XAxis{
+			SplitNumber: 20,
+		}),
+		charts.WithYAxisOpts(opts.YAxis{
+			Scale: opts.Bool(true),
+		}),
+		charts.WithDataZoomOpts(opts.DataZoom{
+			Type:       "inside",
+			Start:      50,
+			End:        100,
+			XAxisIndex: []int{0},
+		}),
+		charts.WithDataZoomOpts(opts.DataZoom{
+			Type:       "slider",
+			Start:      50,
+			End:        100,
+			XAxisIndex: []int{0},
+		}),
+	)
+
+	kline.SetXAxis(x).AddSeries("kline", y)
+	return kline
+}
+
+func klineDataZoomYAxis() *charts.Kline {
+	kline := charts.NewKLine()
+
+	x := make([]string, 0)
+	y := make([]opts.KlineData, 0)
+	for i := 0; i < len(kd); i++ {
+		x = append(x, kd[i].date)
+		y = append(y, opts.KlineData{Value: kd[i].data})
+	}
+
+	kline.SetGlobalOptions(
+		charts.WithTitleOpts(opts.Title{
+			Title: "DataZoom(yAxis)",
+		}),
+		charts.WithXAxisOpts(opts.XAxis{
+			SplitNumber: 20,
+		}),
+		charts.WithYAxisOpts(opts.YAxis{
+			Scale: opts.Bool(true),
+		}),
+		charts.WithDataZoomOpts(opts.DataZoom{
+			Type:       "slider",
+			Start:      50,
+			End:        100,
+			YAxisIndex: []int{0},
+		}),
+	)
+
+	kline.SetXAxis(x).AddSeries("kline", y)
+	return kline
+}
+
+func klineStyle() *charts.Kline {
+	kline := charts.NewKLine()
+
+	x := make([]string, 0)
+	y := make([]opts.KlineData, 0)
+	for i := 0; i < len(kd); i++ {
+		x = append(x, kd[i].date)
+		y = append(y, opts.KlineData{Value: kd[i].data})
+	}
+
+	kline.SetGlobalOptions(
+		charts.WithTitleOpts(opts.Title{
+			Title: "different style",
+		}),
+		charts.WithXAxisOpts(opts.XAxis{
+			SplitNumber: 20,
+		}),
+		charts.WithYAxisOpts(opts.YAxis{
+			Scale: opts.Bool(true),
+		}),
+		charts.WithDataZoomOpts(opts.DataZoom{
+			Start:      50,
+			End:        100,
+			XAxisIndex: []int{0},
+		}),
+	)
+
+	kline.SetXAxis(x).AddSeries("kline", y).
+		SetSeriesOptions(
+			charts.WithMarkPointNameTypeItemOpts(opts.MarkPointNameTypeItem{
+				Name:     "highest value",
+				Type:     "max",
+				ValueDim: "highest",
+			}),
+			charts.WithMarkPointNameTypeItemOpts(opts.MarkPointNameTypeItem{
+				Name:     "lowest value",
+				Type:     "min",
+				ValueDim: "lowest",
+			}),
+			charts.WithMarkPointStyleOpts(opts.MarkPointStyle{
+				Label: &opts.Label{
+					Show: opts.Bool(true),
+				},
+			}),
+			charts.WithItemStyleOpts(opts.ItemStyle{
+				Color:        "#ec0000",
+				Color0:       "#00da3c",
+				BorderColor:  "#8A0000",
+				BorderColor0: "#008F28",
+			}),
+		)
+	return kline
+}
+
+//type KlineExamples struct{}
+//func (KlineExamples) Examples() {
+
+func candlestickExample() {
+	page := components.NewPage()
+	page.AddCharts(
+		klineBase(),
+		klineDataZoomInside(),
+		klineDataZoomBoth(),
+		klineDataZoomYAxis(),
+		klineStyle(),
+	)
+
+	f, err := os.Create(dir + "candle.html")
+	if err != nil {
+		panic(err)
+
+	}
+	page.Render(io.MultiWriter(f))
 }
