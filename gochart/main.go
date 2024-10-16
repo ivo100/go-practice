@@ -3,6 +3,7 @@ package main
 //go:generate go run main.go
 
 import (
+	"fmt"
 	"github.com/wcharczuk/go-chart/v2"
 	"os"
 	"time"
@@ -56,8 +57,9 @@ func main() {
 			smaSeries,
 		},
 	}
-
-	f, _ := os.Create("output.png")
+	file := "/tmp/chart.png"
+	fmt.Println("output written to " + file)
+	f, _ := os.Create(file)
 	defer f.Close()
 	graph.Render(chart.PNG, f)
 }
