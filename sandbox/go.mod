@@ -1,13 +1,13 @@
 module sandbox
 
-go 1.22.1
+go 1.23
 
 require (
 	github.com/gdamore/tcell/v2 v2.7.4
 	github.com/go-gota/gota v0.12.0
 	github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible
-	github.com/nats-io/nats.go v1.35.0
-	github.com/rivo/tview v0.0.0-20240505185119-ed116790de0f
+	github.com/nats-io/nats.go v1.37.0
+	github.com/rivo/tview v0.0.0-20241103174730-c76f7879f592
 	github.com/traefik/yaegi v0.16.1
 )
 
