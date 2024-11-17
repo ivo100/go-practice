@@ -3,6 +3,7 @@ module sandbox
 go 1.23
 
 require (
+	github.com/evandrojr/string-interpolation v0.1.1
 	github.com/gdamore/tcell/v2 v2.7.4
 	github.com/go-gota/gota v0.12.0
 	github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible
