@@ -1,0 +1,16 @@
+ls /System/Library/Sounds/
+
+Basso.aiff
+Frog.aiff
+Hero.aiff
+Pop.aiff
+Submarine.aiff
+Blow.aiff
+Funk.aiff
+Morse.aiff
+Purr.aiff
+Tink.aiff
+Bottle.aiff
+Glass.aiff
+Ping.aiff
+Sosumi.aiff

@@ -1,0 +1,30 @@
+
+05:52:06 bench$ ./bench test
+Starting benchmark [msgs=100000, msgsize=128, pubs=1, subs=0]
+Pub stats: 6,197,034 msgs/sec ~ 756.47 MB/sec
+
+over wifi
+
+05:52:40 bench$ ./bench -s nats://mini test
+Starting benchmark [msgs=100000, msgsize=128, pubs=1, subs=0]
+Pub stats: 33,572 msgs/sec ~ 4.10 MB/sec
+
+./bench -s nats://mini -np 5 -ns 20  test
+Starting benchmark [msgs=100000, msgsize=128, pubs=5, subs=20]
+NATS Pub/Sub stats: 209,415 msgs/sec ~ 25.56 MB/sec
+ Pub stats: 28,543 msgs/sec ~ 3.48 MB/sec
+  [1] 28,888 msgs/sec ~ 3.53 MB/sec (20000 msgs)
+  [2] 24,389 msgs/sec ~ 2.98 MB/sec (20000 msgs)
+  [3] 29,389 msgs/sec ~ 3.59 MB/sec (20000 msgs)
+  [4] 13,136 msgs/sec ~ 1.60 MB/sec (20000 msgs)
+  [5] 5,875 msgs/sec ~ 734.43 KB/sec (20000 msgs)
+  min 5,875 | avg 20,335 | max 29,389 | stddev 9,300 msgs
+ Sub stats: 199,631 msgs/sec ~ 24.37 MB/sec
+  [1] 22,776 msgs/sec ~ 2.78 MB/sec (100000 msgs)
+  [2] 14,758 msgs/sec ~ 1.80 MB/sec (100000 msgs)
+  [3] 14,083 msgs/sec ~ 1.72 MB/sec (100000 msgs)
+  [4] 13,612 msgs/sec ~ 1.66 MB/sec (100000 msgs)
+...
+  [20] 9,987 msgs/sec ~ 1.22 MB/sec (100000 msgs)
+  min 9,987 | avg 12,346 | max 22,776 | stddev 2,686 msgs
+

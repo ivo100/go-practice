@@ -7,6 +7,11 @@ import (
 )
 
 func main() {
+	//simple()
+	streams()
+}
+
+func simple() {
 	// Connect to a server
 	nc, err := nats.Connect(nats.DefaultURL)
 	if err != nil {
