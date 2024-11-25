@@ -18,3 +18,4 @@ myenv
 venv
 *.pyc
 __pycache__
+/gochart/gochart
