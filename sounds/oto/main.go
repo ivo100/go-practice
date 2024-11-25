@@ -25,11 +25,9 @@ to convert 24-bit PCM to 16-bit PCM
 
 sox /System/Library/Sounds/Submarine.aiff --rate 44100 --bits 16 submarine.wav
 
-for file in *.aiff; do
+for file in *.aiff; do sox "$file" --rate 44100 --bits 16 "${file%.aiff}.wav"; done
 
-	sox "$file" --rate 44100 --bits 16 "${file%.aiff}.wav"
-
-done
+for file in *.wav; do sox --i "$file"; done
 
 play submarine.wav
 
@@ -58,11 +56,60 @@ var (
 	}
 )
 
-func main() {
+func PlaySound(p string, sampleRate int) {
 	// Configure the audio player
-	sampleRate := 44100
+	//sampleRate := 44100
+	//sampleRate := 48000
 	channelNum := 2
 	bitDepthInBytes := 2
+	bufferSize := 65536
+
+	log.Println("Playing sound:", p)
+	file, err := os.Open(p)
+	if err != nil {
+		log.Printf("Failed to open audio file: %v", err)
+		return
+	}
+	defer file.Close()
+	data, err := io.ReadAll(file)
+	if err != nil {
+		log.Printf("Failed to read audio file: %v", err)
+		return
+	}
+	log.Printf("data len %d", len(data))
+
+	context, err := oto.NewContext(sampleRate, channelNum, bitDepthInBytes, bufferSize)
+	if err != nil {
+		log.Printf("Failed to create audio context: %v", err)
+		return
+	}
+	player := context.NewPlayer()
+	// Play the audio
+	if _, err := player.Write(data); err != nil {
+		log.Printf("Failed to play audio: %v", err)
+	}
+	//time.Sleep(time.Second * 2)
+	player.Close()
+	context.Close()
+}
+func main() {
+	//p := "/Users/ivostoyanov/tradebot/data/sounds/prompt1.wav"
+	//p := "/Users/ivostoyanov/tradebot/data/sounds/bell1.wav"
+	p := "/Users/ivostoyanov/tradebot/data/sounds/beep1.wav"
+	//p := "/Users/ivostoyanov/tradebot/data/sounds/Frog.wav"
+	//p := "/Users/ivostoyanov/tradebot/data/sounds/Submarine.wav"
+	PlaySound(p, 48000)
+	//p = "sounds/Frog.wav"
+	//PlaySound(p)
+}
+
+func OLD() {
+	// Configure the audio player
+	sampleRate := 44100
+	sampleRate = 48000
+	channelNum := 2
+	bitDepthInBytes := 2
+	bufferSize := 65536
 
 	for _, sound := range sounds {
 		log.Println("Playing sound:", sound)
@@ -77,7 +124,7 @@ func main() {
 			log.Printf("Failed to read audio file: %v", err)
 			continue
 		}
-		context, err := oto.NewContext(sampleRate, channelNum, bitDepthInBytes, len(data))
+		context, err := oto.NewContext(sampleRate, channelNum, bitDepthInBytes, bufferSize)
 		if err != nil {
 			log.Printf("Failed to create audio context: %v", err)
 			file.Close()

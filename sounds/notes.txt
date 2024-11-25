@@ -1,3 +1,19 @@
+beep1.wav
+beep2.wav
+bell1.wav
+bell2.wav
+bell4.wav
+bell5.wav
+bell6.wav
+bell7.wav
+bell8.wav
+cookoo.wav
+ping2.wav
+prompt1.wav
+prompt2.wav
+success.wav
+
+
 ls /System/Library/Sounds/
 
 Basso.aiff
@@ -14,3 +30,7 @@ Bottle.aiff
 Glass.aiff
 Ping.aiff
 Sosumi.aiff
+
+# batch convert
+# for file in *.aiff; do sox "$file" --rate 44100 --bits 16 "${file%.aiff}.wav rate 44100 "; done
+# for file in *.wav; do sox "$file" --rate 44100 --bits 16; done
