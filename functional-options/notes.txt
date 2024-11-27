@@ -1,0 +1,106 @@
+Functional options in Go provide a clean and flexible way to configure objects and functions. They achieve this by using variadic functions and closures.
+Here's how it works:
+
+• Define an Option type: This is usually a function type that takes a pointer to the struct you want to configure.
+
+   type Option func(*Config)
+
+• Create functions that return Options: These functions encapsulate the configuration logic and return an Option closure.
+
+   func WithName(name string) Option {
+       return func(c *Config) {
+           c.Name = name
+       }
+   }
+
+   func WithPort(port int) Option {
+       return func(c *Config) {
+           c.Port = port
+       }
+   }
+
+• Use the options in your constructor or function: The constructor or function takes a variadic number of Option arguments and applies them to the object.
+
+   type Config struct {
+       Name string
+       Port int
+   }
+
+   func NewConfig(opts ...Option) *Config {
+       c := &Config{
+           Name: "default",
+           Port: 8080,
+       }
+
+       for _, opt := range opts {
+           opt(c)
+       }
+
+       return c
+   }
+
+• Call the constructor or function with your desired options:
+
+   config := NewConfig(
+       WithName("my-app"),
+       WithPort(8000),
+   )
+
+Benefits:
+
+• Clean and Readable: The code remains clean and readable, even with a large number of options.
+• Easy to Add New Options: Adding new configuration options is straightforward without modifying the existing API.
+• Default Values: You can set default values for configuration options in the constructor or function.
+• Extensibility: Users of your code can easily add their own custom options.
+
+===
+
+Example from github.com/nats-io/nats.go
+
+type (
+	WatchOpt interface {
+		configureWatcher(opts *watchOpts) error
+	}
+
+	watchOpts struct {
+		// Do not send delete markers to the update channel.
+		ignoreDeletes bool
+		// Include all history per subject, not just last one.
+		includeHistory bool
+		// Include only updates for keys.
+		updatesOnly bool
+		// retrieve only the meta data of the entry
+		metaOnly bool
+		// resumeFromRevision is the revision to resume from.
+		resumeFromRevision uint64
+	}
+
+	// KVDeleteOpt is used to configure delete and purge operations.
+	KVDeleteOpt interface {
+		configureDelete(opts *deleteOpts) error
+	}
+
+// Watch for any updates to keys that match the keys argument which could include wildcards.
+// Watch will send a nil entry when it has received all initial values.
+func (kv *kvs) Watch(ctx context.Context, keys string, opts ...WatchOpt) (KeyWatcher, error) {
+	if !searchKeyValid(keys) {
+		return nil, fmt.Errorf("%w: %s", ErrInvalidKey, "keys cannot be empty and must be a valid NATS subject")
+	}
+	var o watchOpts
+	for _, opt := range opts {
+		if opt != nil {
+			if err := opt.configureWatcher(&o); err != nil {
+				return nil, err
+			}
+		}
+	}
+....
+
+func searchKeyValid(key string) bool {
+	if len(key) == 0 || key[0] == '.' || key[len(key)-1] == '.' {
+		return false
+	}
+	return validSearchKeyRe.MatchString(key)
+}
+
+
